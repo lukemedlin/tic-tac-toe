@@ -1,0 +1,64 @@
+:root {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+  --spot-borders: 5px solid black;
+}
+
+.page-wrap {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.game-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 200px);
+  grid-template-rows: repeat(3, 200px);
+  font-size: 200px;
+}
+
+.game-grid > div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.zero-zero {
+  border-bottom: var(--spot-borders);
+  border-right: var(--spot-borders);
+}
+
+.zero-one {
+  border-bottom: var(--spot-borders);
+  border-right: var(--spot-borders);
+}
+
+.zero-two {
+  border-bottom: var(--spot-borders);
+}
+
+.one-zero {
+  border-bottom: var(--spot-borders);
+  border-right: var(--spot-borders);
+}
+
+.one-one {
+  border-bottom: var(--spot-borders);
+  border-right: var(--spot-borders);
+}
+
+.one-two {
+  border-bottom: var(--spot-borders);
+}
+
+.two-zero {
+  border-right: var(--spot-borders);
+}
+
+.two-one {
+  border-right: var(--spot-borders);
+}
