@@ -25,45 +25,46 @@ const gameBoard = (() => {
 
   const checkWinner = () => {
     if (board[recentMoveRow].every((value) => value === game.getTurn().mark)) {
-      console.log(game.getTurn().name + ' has won!');
+      game.updateWins();
     } else if (
       board[0][recentMoveCol] === game.getTurn().mark &&
       board[1][recentMoveCol] === game.getTurn().mark &&
       board[2][recentMoveCol] === game.getTurn().mark
     ) {
-      console.log(game.getTurn().name + ' has won!');
+      game.updateWins();
     } else if (
       board[0][0] === game.getTurn().mark &&
       board[1][1] === game.getTurn().mark &&
       board[2][2] === game.getTurn().mark
     ) {
-      console.log(game.getTurn().name + ' has won!');
+      game.updateWins();
     } else if (
       board[2][0] === game.getTurn().mark &&
       board[1][1] === game.getTurn().mark &&
       board[0][2] === game.getTurn().mark
     ) {
-      console.log(game.getTurn().name + ' has won!');
-    } else if (
-      !board.flat().some(val => val === ' ')
-    ) {
-      console.log('You\'ve tied!');
+      game.updateWins();
+    } else if (!board.flat().some((val) => val === ' ')) {
+      console.log("You've tied!");
     }
   };
 
   const markSpot = (event) => {
-    if (
-      board[event.currentTarget.dataset.row][
-        event.currentTarget.dataset.col
-      ] === ' '
-    ) {
-      board[event.currentTarget.dataset.row][event.currentTarget.dataset.col] =
-        game.getTurn().mark;
-      recentMoveRow = event.currentTarget.dataset.row;
-      recentMoveCol = event.currentTarget.dataset.col;
-      checkWinner();
-      game.nextTurn();
-      render();
+    if (game.getContinueGame()) {
+      if (
+        board[event.currentTarget.dataset.row][
+          event.currentTarget.dataset.col
+        ] === ' '
+      ) {
+        board[event.currentTarget.dataset.row][
+          event.currentTarget.dataset.col
+        ] = game.getTurn().mark;
+        recentMoveRow = event.currentTarget.dataset.row;
+        recentMoveCol = event.currentTarget.dataset.col;
+        checkWinner();
+        game.nextTurn();
+        render();
+      }
     }
   };
 
@@ -86,17 +87,39 @@ const gameBoard = (() => {
   };
 })();
 
-const Player = (name, mark) => {
+const Player = (name, mark, wins = 0) => {
   return {
     name,
     mark,
+    wins,
   };
 };
 
 const game = (() => {
-  let playerOne = Player('Luke', 'X');
-  let playerTwo = Player('Garett', 'O');
+  const playerOne = Player('Player One', 'X');
+  const playerTwo = Player('Player Two', 'O');
   let turn = playerOne;
+  let continueGame = true;
+
+  const newGame = () => {
+    gameBoard.resetBoard();
+    playerOne.name = document.querySelector('#player-one').value;
+    playerTwo.name = document.querySelector('#player-two').value;
+    continueGame = true;
+  };
+
+  document.querySelector('.new-game').addEventListener('click', newGame);
+
+  const updateWins = () => {
+    turn.wins += 1;
+    document.querySelector('#player-one-score').textContent = playerOne.wins;
+    document.querySelector('#player-two-score').textContent = playerTwo.wins;
+    continueGame = false;
+  };
+
+  const getContinueGame = () => {
+    return continueGame;
+  };
 
   const nextTurn = () => {
     turn === playerOne ? (turn = playerTwo) : (turn = playerOne);
@@ -119,5 +142,7 @@ const game = (() => {
     getPlayerTwo,
     nextTurn,
     getTurn,
+    updateWins,
+    getContinueGame,
   };
 })();

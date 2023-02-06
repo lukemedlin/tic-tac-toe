@@ -1,9 +1,12 @@
 :root {
+  --spot-borders: 5px solid black;
+}
+
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: Arial, Helvetica, sans-serif;
-  --spot-borders: 5px solid black;
 }
 
 .page-wrap {
@@ -19,6 +22,7 @@
   grid-template-columns: repeat(3, 200px);
   grid-template-rows: repeat(3, 200px);
   font-size: 200px;
+  margin-bottom: 4rem;
 }
 
 .game-grid > div {
@@ -61,4 +65,18 @@
 
 .two-one {
   border-right: var(--spot-borders);
+}
+
+.player-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem 4rem;
+  font-size: 4rem;
+  justify-items: center;
+}
+
+.player-grid input {
+  font-size: 2rem;
+  text-align: center;
+  width: 300px;
 }
