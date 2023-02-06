@@ -12,14 +12,18 @@ const gameBoard = (() => {
     return board[x][y];
   };
 
-  const setValue = (x, y, player) => {
-    board[x][y] = player;
-  };
-
   const markSpot = (event) => {
-    board[event.currentTarget.dataset.row][event.currentTarget.dataset.col] = 'O'
-    render();
-  }
+    if (
+      board[event.currentTarget.dataset.row][
+        event.currentTarget.dataset.col
+      ] === ' '
+    ) {
+      board[event.currentTarget.dataset.row][event.currentTarget.dataset.col] =
+        game.getTurn();
+      game.nextTurn();
+      render();
+    }
+  };
 
   gameSpotDivs.forEach((div) => div.addEventListener('click', markSpot));
 
@@ -35,7 +39,42 @@ const gameBoard = (() => {
 
   return {
     getValue,
-    setValue,
     render,
+  };
+})();
+
+const Player = (name, mark) => {
+  return {
+    name,
+    mark,
+  };
+};
+
+const game = (() => {
+  let playerOne = Player('Luke', 'X');
+  let playerTwo = Player('Garett', 'O');
+  let turn = 'X';
+
+  const nextTurn = () => {
+    turn === 'X' ? (turn = 'O') : (turn = 'X');
+  };
+
+  const getTurn = () => {
+    return turn;
+  };
+
+  const getPlayerOne = () => {
+    return playerOne.name;
+  };
+
+  const getPlayerTwo = () => {
+    return playerTwo.name;
+  };
+
+  return {
+    getPlayerOne,
+    getPlayerTwo,
+    nextTurn,
+    getTurn,
   };
 })();
