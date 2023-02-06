@@ -1,15 +1,54 @@
 const gameBoard = (() => {
-  const board = [
+  let board = [
     [' ', ' ', ' '],
     [' ', ' ', ' '],
     [' ', ' ', ' '],
   ];
+  let recentMoveRow;
+  let recentMoveCol;
 
   const gameBoardDiv = document.querySelector('.game-grid');
   const gameSpotDivs = document.querySelectorAll('.game-spot');
 
   const getValue = (x, y) => {
     return board[x][y];
+  };
+
+  const resetBoard = () => {
+    board = [
+      [' ', ' ', ' '],
+      [' ', ' ', ' '],
+      [' ', ' ', ' '],
+    ];
+    render();
+  };
+
+  const checkWinner = () => {
+    if (board[recentMoveRow].every((value) => value === game.getTurn().mark)) {
+      console.log(game.getTurn().name + ' has won!');
+    } else if (
+      board[0][recentMoveCol] === game.getTurn().mark &&
+      board[1][recentMoveCol] === game.getTurn().mark &&
+      board[2][recentMoveCol] === game.getTurn().mark
+    ) {
+      console.log(game.getTurn().name + ' has won!');
+    } else if (
+      board[0][0] === game.getTurn().mark &&
+      board[1][1] === game.getTurn().mark &&
+      board[2][2] === game.getTurn().mark
+    ) {
+      console.log(game.getTurn().name + ' has won!');
+    } else if (
+      board[2][0] === game.getTurn().mark &&
+      board[1][1] === game.getTurn().mark &&
+      board[0][2] === game.getTurn().mark
+    ) {
+      console.log(game.getTurn().name + ' has won!');
+    } else if (
+      !board.flat().some(val => val === ' ')
+    ) {
+      console.log('You\'ve tied!');
+    }
   };
 
   const markSpot = (event) => {
@@ -19,7 +58,10 @@ const gameBoard = (() => {
       ] === ' '
     ) {
       board[event.currentTarget.dataset.row][event.currentTarget.dataset.col] =
-        game.getTurn();
+        game.getTurn().mark;
+      recentMoveRow = event.currentTarget.dataset.row;
+      recentMoveCol = event.currentTarget.dataset.col;
+      checkWinner();
       game.nextTurn();
       render();
     }
@@ -39,6 +81,7 @@ const gameBoard = (() => {
 
   return {
     getValue,
+    resetBoard,
     render,
   };
 })();
@@ -53,10 +96,10 @@ const Player = (name, mark) => {
 const game = (() => {
   let playerOne = Player('Luke', 'X');
   let playerTwo = Player('Garett', 'O');
-  let turn = 'X';
+  let turn = playerOne;
 
   const nextTurn = () => {
-    turn === 'X' ? (turn = 'O') : (turn = 'X');
+    turn === playerOne ? (turn = playerTwo) : (turn = playerOne);
   };
 
   const getTurn = () => {
